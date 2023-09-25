@@ -68,6 +68,22 @@ class FullyConnectedLayer:
         self.bias += learning_rate * bias_gradients
         
         return input_delta
+    
+    def prediction(self, x):
+        self.input = x
+        self.output_input = np.dot(x, self.weights) + self.bias
+        
+        if self.activation == 'relu':
+            self.output = relu(self.output_input)
+            self.derivative = relu_derivative
+        elif self.activation == 'sigmoid':
+            self.output = sigmoid(self.output_input)
+            self.derivative = sigmoid_derivative
+        elif self.activation == 'tanh':
+            self.output = tanh(self.output_input)
+            self.derivative = tanh_derivative
+        
+        return self.output
 class NeuralNetwork:
     def __init__(self):
         self.layers = []
@@ -92,25 +108,6 @@ class NeuralNetwork:
             if (epoch + 1) % 100 == 0:
                 print(f'Epoch {epoch + 1}, Loss: {loss}')
     
-data = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-labels = np.array([[0], [1], [1], [0]])
 
-input_size = data.shape[1]
-hidden_size = 4
-output_size = labels.shape[1]
-learning_rate = 0.3
-num_epochs = 1000
-
-nn = NeuralNetwork()
-nn.add_layer(FullyConnectedLayer(input_size, hidden_size, activation='tanh'))
-nn.add_layer(FullyConnectedLayer(hidden_size, output_size, activation='sigmoid'))
-
-nn.train(data, labels, num_epochs, learning_rate)
-
-# Test verilerini kullanarak tahminler yapın
-test_data = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-test_predictions = nn.forward(test_data)
-print("Test Predictions:")
-print(test_predictions)
 
 
