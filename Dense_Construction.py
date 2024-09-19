@@ -1,3 +1,11 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath('..'))
+
+from Vex.Tensor import micrograd as mg
+
+
 import numpy as np 
 
 def tanh(x):
